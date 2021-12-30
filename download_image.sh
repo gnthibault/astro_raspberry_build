@@ -31,11 +31,12 @@ if [ ! -f $image_xz ]; then
     exit 1
   fi
 fi
- 
-echo "Extracting image ${image_xz}"
-#unzip $image_xz > $image_iso
-xz --keep --decompress --threads=4 --stdout $image_xz > $image_iso
- 
-if [ $? -ne 0 ]; then
+
+if [ ! -f $image_iso ]; then
+  echo "Extracting image ${image_xz}"
+  #unzip $image_xz > $image_iso
+  xz --keep --decompress --threads=4 --stdout $image_xz > $image_iso
+  if [ $? -ne 0 ]; then
     echo "Uncompressing image ${image_xz} failed" ; exit -1;
+  fi
 fi
