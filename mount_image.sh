@@ -5,6 +5,8 @@
 image_path=./downloads
 output_path=./outputs
 image_iso="$image_path/image.img"
+xz_suffix=".tomove"
+tmp_image_xz="$image_iso$xz_suffix"
 output_image_xz="$output_path/image.img.xz"
 
 # Script related utilities
@@ -39,4 +41,5 @@ if [ ! -f $output_path ]; then
 fi
 
 echo "Now compressing output image to $output_image_xz"
-xz --compress --threads=4 $output_image_xz --keep
+xz --compress --threads=4 --keep --suffix=$xz_suffix $image_iso
+mv $tmp_image_xz $output_image_xz
