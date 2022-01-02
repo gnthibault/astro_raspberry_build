@@ -17,3 +17,6 @@ systemctl restart systemd-binfmt.service
 #gitlab-runner ALL=(ALL) NOPASSWD: ALL
 # You may also prefer specifying which command the sudo user can use witout pwd
 # gitlab-runner ALL=(ALL) NOPASSWD: /usr/bin/npm
+
+# Other reference
+# https://geoffhudik.com/tech/2020/04/27/scripting-raspberry-pi-image-builds/
