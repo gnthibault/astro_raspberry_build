@@ -6,9 +6,9 @@
 # Now update and install packages
 apt-get update && apt-get upgrade --yes
 apt-get install --yes\
-  net-tools\
-  build-essential
-
+  build-essential\
+  curl\
+  net-tools
 
 #### TIG stack
 # from https://nwmichl.net/2020/07/14/telegraf-influxdb-grafana-on-raspberrypi-from-scratch/
@@ -22,6 +22,18 @@ sudo apt-get install -y grafana influxdb telegraf
 
 sudo systemctl enable influxdb grafana-server telegraf
 sudo systemctl start influxdb grafana-server telegraf
+
+# config files for influxdb: enable REST API
+# sample taken from https://github.com/influxdata/influxdb/blob/1.8/etc/config.sample.toml
+# with some modifications in the [http] section
+# Also check the doc for more info: https://docs.influxdata.com/influxdb/v1.8/query_language/manage-database/
+cp ./influxdb.conf /etc/influxdb/influxdb.conf
+systemctl restart influxdb.service
+curl -XPOST 'http://localhost:8086/query' --data-urlencode 'q=CREATE DATABASE "telegraf"'
+curl -XPOST 'http://localhost:8086/query' --data-urlencode 'q=CREATE USER "telegraf" WITH PASSWORD "Telegr@f"'
+curl -XPOST 'http://localhost:8086/query' --data-urlencode 'q=GRANT ALL ON "telegraf" TO "telegrafuser"'
+curl -XPOST 'http://localhost:8086/query' --data-urlencode 'q=CREATE RETENTION POLICY "52Weeks" ON "telegraf" DURATION 52w REPLICATION 1'
+
 
 # config files for telegraf: influxdb
 cp ./telegraf.conf /etc/telegraf/telegraf.conf
