@@ -25,8 +25,8 @@ sudo mount ${loop_dir}p1 $tmp_dir/boot/
 
 # do stuff to $tmp_dir which is rpi filesystem
 echo "Starting actual image build"
-cp --remove-destination /etc/resolv.conf $tmp_dir/etc/
-cp -r $install_dir $tmp_dir/root/install_dir
+sudo cp --remove-destination /etc/resolv.conf $tmp_dir/etc/
+sudo cp -r $install_dir $tmp_dir/root/install_dir
 sudo chroot $tmp_dir /bin/bash /root/install_dir/run_pi_install_script.sh
 
 # cleanup
@@ -42,4 +42,4 @@ fi
 
 echo "Now compressing output image to $output_image_xz"
 xz --compress --threads=4 --keep --suffix=$xz_suffix $image_iso
-mv $tmp_image_xz $output_image_xz
+sudo mv $tmp_image_xz $output_image_xz
